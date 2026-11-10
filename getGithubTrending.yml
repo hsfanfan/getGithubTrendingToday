@@ -1,12 +1,15 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
 name: getGithubTrendingToday
 
 on:
   schedule:
     - cron: "0 2 * * *"
-
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:   # 手动触发，网页点按钮运行
 # 分钟 (0-59)
 # 小时 (0-23)
 # 天 (1-31)
@@ -15,15 +18,14 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
+    - uses: actions/checkout@v7 # v7：原生 node24，消除警告
+    - name: Set up Python
+      uses: actions/setup-python@v6
       with:
-        python-version: 3.8
+        python-version: "3.12"
+        check-latest: true
     
     - name: Install dependencies
       run: |
